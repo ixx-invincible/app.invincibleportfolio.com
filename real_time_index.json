@@ -1,13 +1,11 @@
 {
-    "now": "2020-12-01 16:23:45",
-    "pp_previous_close": 417.50734402305,
-    "ip_previous_close": 424.38668879001,
-    "spy_previous_close": 363.67,
-    "gld_previous_close": 167.79,
-    "tlt_previous_close": 160.22,
-    "pp_live_price": 415.7969428437925,
-    "ip_live_price": 422.6330826974164,
-    "spy_quote_price": 362.05999755859375,
-    "gld_quote_price": 166.6699981689453,
-    "tlt_quote_price": 160.02000427246094
+    "now": "2020-12-02 10:34:39",
+    "pp_previous_close": 415.66102079785003,
+    "spy_previous_close": 362.06,
+    "gld_previous_close": 166.67,
+    "tlt_previous_close": 159.86,
+    "pp_live_price": 418.0353489547837,
+    "spy_quote_price": 366.0199890136719,
+    "gld_quote_price": 170.17999267578125,
+    "tlt_quote_price": 157.5
 }
