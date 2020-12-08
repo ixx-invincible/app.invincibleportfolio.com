@@ -1,3 +1,5 @@
 #!/bin/bash
 
-/opt/app.invincibleportfolio.com/.venv/bin/python3 /opt/app.invincibleportfolio.com/get_quote.py
+cd /opt/app.invincibleportfolio.com/
+
+.venv/bin/python3 get_quote.py
