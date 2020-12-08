@@ -1,30 +1,28 @@
 [
     {
         "symbol": "GLD",
-        "open": 172.78,
-        "latestPrice": 172.32,
-        "latestUpdate": 1607115600115,
-        "previousClose": 172.81
+        "open": 172.56,
+        "latestPrice": 174.89,
+        "latestUpdate": 1607374800118
     },
     {
         "symbol": "SPY",
-        "open": 367.3,
-        "latestPrice": 369.85,
-        "latestUpdate": 1607115600186,
-        "previousClose": 366.69
+        "open": 368.97,
+        "latestPrice": 369.09,
+        "latestUpdate": 1607374800184
     },
     {
         "symbol": "TLT",
-        "open": 155.7,
-        "latestPrice": 155.2,
-        "latestUpdate": 1607115600795,
-        "previousClose": 157.51
+        "open": 156.35,
+        "latestPrice": 156.6,
+        "latestUpdate": 1607374800891
     },
     {
         "symbol": "GST",
-        "previousClose": 421.56775149110916,
-        "open": 420.38003335335287,
-        "latestPrice": 420.6519960839569,
-        "latestUpdate": 1607115600795
+        "previousClose": 422.3554541018,
+        "previousDate": "2020-12-07",
+        "open": 420.27265045281786,
+        "latestPrice": 422.35545090196274,
+        "latestUpdate": 1607374800891
     }
 ]

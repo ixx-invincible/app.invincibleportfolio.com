@@ -14,36 +14,42 @@ import matplotlib.ticker as mtick
 import matplotlib.gridspec as gridspec
 
 
+weekday = datetime.today().weekday()
+
 prices = ffn.get('SPY, TLT, GLD', start='2005-01-01')
 
 prices = prices.reset_index()
 prices['portfolio'] = 100
-prices['spy_shares'] = 0
-prices['gld_shares'] = 0
-prices['tlt_shares'] = 0
+prices['spy_rb'] = 0
+prices['gld_rb'] = 0
+prices['tlt_rb'] = 0
+prices['portfolio_rb'] = 100
 
 
 for i in prices.index:
     if i == 0:
-        prices.loc[i, 'spy_shares'] = prices['portfolio'][i] / 3 / prices['spy'][i]
-        prices.loc[i, 'tlt_shares'] = prices['portfolio'][i] / 3 / prices['tlt'][i]
-        prices.loc[i, 'gld_shares'] = prices['portfolio'][i] / 3 / prices['gld'][i]
+        prices.loc[i, 'spy_rb'] = prices['spy'][0]
+        prices.loc[i, 'tlt_rb'] = prices['tlt'][0]
+        prices.loc[i, 'gld_rb'] = prices['gld'][0]
+        prices.loc[i, 'portfolio_rb'] = 100
         
     else:
-        prices.loc[i, 'portfolio'] = prices['spy_shares'][i-1] * prices['spy'][i] + prices['gld_shares'][i-1] * prices['gld'][i] + prices['tlt_shares'][i-1] * prices['tlt'][i]
+        prices.loc[i, 'portfolio'] = prices['portfolio_rb'][i-1] * ((prices['spy'][i] / prices['spy_rb'][i-1] + prices['tlt'][i] / prices['tlt_rb'][i-1] + prices['gld'][i] / prices['gld_rb'][i-1]) / 3)
         
-        if(prices.Date[i].month % 3 == 0 and prices.Date[i+1].month % 3 == 1):
-            prices.loc[i, 'spy_shares'] = prices['portfolio'][i] / 3 / prices['spy'][i]
-            prices.loc[i, 'tlt_shares'] = prices['portfolio'][i] / 3 / prices['tlt'][i]
-            prices.loc[i, 'gld_shares'] = prices['portfolio'][i] / 3 / prices['gld'][i]
+        if(i != len(prices)-1 and prices.Date[i].month % 3 == 0 and prices.Date[i+1].month % 3 == 1):
+            prices.loc[i, 'spy_rb'] = prices['spy'][i]
+            prices.loc[i, 'tlt_rb'] = prices['tlt'][i]
+            prices.loc[i, 'gld_rb'] = prices['gld'][i]
+            prices.loc[i, 'portfolio_rb'] = prices['portfolio'][i]
         else:
-            prices.loc[i, 'spy_shares'] = prices.loc[i-1, 'spy_shares']
-            prices.loc[i, 'tlt_shares'] = prices.loc[i-1, 'tlt_shares']
-            prices.loc[i, 'gld_shares'] = prices.loc[i-1, 'gld_shares']
+            prices.loc[i, 'spy_rb'] = prices.loc[i-1, 'spy_rb']
+            prices.loc[i, 'tlt_rb'] = prices.loc[i-1, 'tlt_rb']
+            prices.loc[i, 'gld_rb'] = prices.loc[i-1, 'gld_rb']
+            prices.loc[i, 'portfolio_rb'] = prices.loc[i-1, 'portfolio_rb']
             
             
 
-prices.to_excel('out/permanent_portfolio.xlsx')
+prices.to_csv('out/permanent_portfolio.csv')
 
 
 prices.set_index('Date', inplace=True)

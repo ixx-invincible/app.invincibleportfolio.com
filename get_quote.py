@@ -6,15 +6,6 @@ import json
 import pandas as pd
 
 
-last_rebalancing = {
-    'rebalance_date': '2020-09-30',
-    'index': 415.1941708,
-    'spy': 334.8900146,
-    'gld': 162.7501068,
-    'tlt': 177.1199951,
-}
-
-
 api_url = 'https://cloud.iexapis.com/stable'
 endpoint = '/stock/market/quote'
 token = 'pk_1dafd28f39414e6fa735c9350a508a47'
@@ -22,16 +13,16 @@ token = 'pk_1dafd28f39414e6fa735c9350a508a47'
 
 while 1:
     now = datetime.now()
-    if now.hour <= 6 or now.hour >= 9:
+    if now.hour <= 6 or now.hour >= 21:
         try:
-            r = requests.get(api_url + endpoint + '?token=' + token + '&symbols=gld,spy,tlt&filter=symbol,open,latestPrice,latestUpdate,previousClose')
+            r = requests.get(api_url + endpoint + '?token=' + token + '&symbols=gld,spy,tlt&filter=symbol,open,latestPrice,latestUpdate')
 
             quotes = json.loads(r.text)
 
             gld = {}
             spy = {}
             tlt = {}
-            index = {'symbol': 'GST'}
+            gst = {'symbol': 'GST'}
             latestUpdate = 0
 
             for quote in quotes:
@@ -48,29 +39,44 @@ while 1:
                     tlt = quote
 
 
-            index['previousClose'] = last_rebalancing['index'] * ((gld['previousClose']/last_rebalancing['gld'] + spy['previousClose']/last_rebalancing['spy'] + tlt['previousClose']/last_rebalancing['tlt']) / 3)
-            index['open'] = last_rebalancing['index'] * ((gld['open']/last_rebalancing['gld'] + spy['open']/last_rebalancing['spy'] + tlt['open']/last_rebalancing['tlt']) / 3)
-            index['latestPrice'] = last_rebalancing['index'] * ((gld['latestPrice']/last_rebalancing['gld'] + spy['latestPrice']/last_rebalancing['spy'] + tlt['latestPrice']/last_rebalancing['tlt']) / 3)
-            index['latestUpdate'] = latestUpdate
+            with open('quote/invincible_portfolio_latest.json') as f:
+                data = json.load(f)
+                gld['previousClose'] = data[0]['gld']
+                spy['previousClose'] = data[0]['spy']
+                tlt['previousClose'] = data[0]['tlt']
 
-            quotes.append(index)
-
-
-
-            today = datetime.today().strftime('%Y-%m-%d')
-
-            # Writing to today.txt 
-            with open(os.getcwd() + "/quote/" + today + ".log", "a") as outfile: 
-                outfile.write("\n")
-                outfile.write(json.dumps(quotes)) 
+                gst['previousClose'] = data[0]['portfolio']
+                gst['previousDate'] = datetime.fromtimestamp(data[0]['Date']/1000).strftime("%Y-%m-%d")
 
 
-            # Serializing json  
-            json_object = json.dumps(quotes, indent = 4) 
+                if gld['open'] != None and spy['open'] != None and tlt['open'] != None:
+                    gst['open'] = data[0]['portfolio_rb'] * ((gld['open']/data[0]['gld_rb'] + spy['open']/data[0]['spy_rb'] + tlt['open']/data[0]['tlt_rb']) / 3)
+                
+                if gld['latestPrice'] != None and spy['latestPrice'] != None and tlt['latestPrice'] != None:
+                    gst['latestPrice'] = data[0]['portfolio_rb'] * ((gld['latestPrice']/data[0]['gld_rb'] + spy['latestPrice']/data[0]['spy_rb'] + tlt['latestPrice']/data[0]['tlt_rb']) / 3)
+            
+                gst['latestUpdate'] = latestUpdate
+
+            quotes.append(gst)
 
             # Writing to quote.json 
-            with open(os.getcwd() + "/quote/latest.json", "w") as outfile: 
-                outfile.write(json_object) 
+            with open("quote/latest.json", "w") as outfile: 
+                outfile.write(json.dumps(quotes, indent = 4)) 
+
+
+            # Writing to today.log 
+            today = datetime.today().strftime('%Y-%m-%d')
+            quotes_latest = {
+                'latestUpdate': latestUpdate,
+                'spy': spy['latestPrice'],
+                'gld': gld['latestPrice'],
+                'tlt': tlt['latestPrice'],
+                'gst': gst['latestPrice']
+            }
+
+            with open("quote/" + today + ".log", "a") as outfile: 
+                outfile.write("\n")
+                outfile.write(json.dumps(quotes_latest)) 
         except:
             pass
 
