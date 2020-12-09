@@ -15,7 +15,7 @@ while 1:
     now = datetime.now()
     if now.hour <= 6 or now.hour >= 21:
         try:
-            r = requests.get(api_url + endpoint + '?token=' + token + '&symbols=gld,spy,tlt&filter=symbol,open,latestPrice,latestUpdate')
+            r = requests.get(api_url + endpoint + '?token=' + token + '&symbols=gld,spy,tlt&filter=symbol,open,latestPrice,latestUpdate,isUSMarketOpen')
 
             quotes = json.loads(r.text)
 
@@ -41,23 +41,31 @@ while 1:
 
             with open('quote/invincible_portfolio_latest.json') as f:
                 data = json.load(f)
-                gld['previousClose'] = data[0]['gld']
-                spy['previousClose'] = data[0]['spy']
-                tlt['previousClose'] = data[0]['tlt']
 
-                gst['previousClose'] = data[0]['portfolio']
-                gst['previousDate'] = datetime.fromtimestamp(data[0]['Date']/1000).strftime("%Y-%m-%d")
+                if spy['isUSMarketOpen']:
+                    data = data[1]
+                else:
+                    data = data[0]
+
+                gld['previousClose'] = data['gld']
+                spy['previousClose'] = data['spy']
+                tlt['previousClose'] = data['tlt']
+
+                gst['previousClose'] = data['portfolio']
+                gst['previousDate'] = datetime.fromtimestamp(data['Date']/1000).strftime("%Y-%m-%d")
 
 
                 if gld['open'] != None and spy['open'] != None and tlt['open'] != None:
-                    gst['open'] = data[0]['portfolio_rb'] * ((gld['open']/data[0]['gld_rb'] + spy['open']/data[0]['spy_rb'] + tlt['open']/data[0]['tlt_rb']) / 3)
+                    gst['open'] = data['portfolio_rb'] * ((gld['open']/data['gld_rb'] + spy['open']/data['spy_rb'] + tlt['open']/data['tlt_rb']) / 3)
                 
                 if gld['latestPrice'] != None and spy['latestPrice'] != None and tlt['latestPrice'] != None:
-                    gst['latestPrice'] = data[0]['portfolio_rb'] * ((gld['latestPrice']/data[0]['gld_rb'] + spy['latestPrice']/data[0]['spy_rb'] + tlt['latestPrice']/data[0]['tlt_rb']) / 3)
+                    gst['latestPrice'] = data['portfolio_rb'] * ((gld['latestPrice']/data['gld_rb'] + spy['latestPrice']/data['spy_rb'] + tlt['latestPrice']/data['tlt_rb']) / 3)
             
                 gst['latestUpdate'] = latestUpdate
 
+            
             quotes.append(gst)
+
 
             # Writing to quote.json 
             with open("quote/latest.json", "w") as outfile: 
