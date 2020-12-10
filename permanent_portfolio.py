@@ -6,6 +6,7 @@ Created on Fri Feb 21 10:22:27 2020
 """
 
 from datetime import datetime
+import json
 
 import ffn
 import matplotlib.pyplot as plt
@@ -14,66 +15,67 @@ import matplotlib.ticker as mtick
 import matplotlib.gridspec as gridspec
 
 
-weekday = datetime.today().weekday()
-
-prices = ffn.get('SPY, TLT, GLD', start='2005-01-01')
+prices = ffn.get('GLD, VTI, TLT, BIL', start='2005-01-01')
 
 prices = prices.reset_index()
 prices['portfolio'] = 100
-prices['spy_rb'] = 0
 prices['gld_rb'] = 0
+prices['vti_rb'] = 0
 prices['tlt_rb'] = 0
+prices['bil_rb'] = 0
 prices['portfolio_rb'] = 100
+
+symbols = ['gld', 'vti', 'tlt', 'bil']
 
 
 for i in prices.index:
     if i == 0:
-        prices.loc[i, 'spy_rb'] = prices['spy'][0]
-        prices.loc[i, 'tlt_rb'] = prices['tlt'][0]
-        prices.loc[i, 'gld_rb'] = prices['gld'][0]
+        for symbol in symbols:
+            prices.loc[i, symbol + '_rb'] = prices[symbol][0]
+
         prices.loc[i, 'portfolio_rb'] = 100
         
     else:
-        prices.loc[i, 'portfolio'] = prices['portfolio_rb'][i-1] * ((prices['spy'][i] / prices['spy_rb'][i-1] + prices['tlt'][i] / prices['tlt_rb'][i-1] + prices['gld'][i] / prices['gld_rb'][i-1]) / 3)
+        prices.loc[i, 'portfolio'] = prices['portfolio_rb'][i-1] * ((prices['vti'][i] / prices['vti_rb'][i-1] + prices['tlt'][i] / prices['tlt_rb'][i-1] + prices['gld'][i] / prices['gld_rb'][i-1] + prices['bil'][i] / prices['bil_rb'][i-1]) / 4)
         
         if(i != len(prices)-1 and prices.Date[i].month % 3 == 0 and prices.Date[i+1].month % 3 == 1):
-            prices.loc[i, 'spy_rb'] = prices['spy'][i]
-            prices.loc[i, 'tlt_rb'] = prices['tlt'][i]
-            prices.loc[i, 'gld_rb'] = prices['gld'][i]
+            for symbol in symbols:
+                prices.loc[i, symbol + '_rb'] = prices[symbol][i]
+
             prices.loc[i, 'portfolio_rb'] = prices['portfolio'][i]
         else:
-            prices.loc[i, 'spy_rb'] = prices.loc[i-1, 'spy_rb']
-            prices.loc[i, 'tlt_rb'] = prices.loc[i-1, 'tlt_rb']
-            prices.loc[i, 'gld_rb'] = prices.loc[i-1, 'gld_rb']
-            prices.loc[i, 'portfolio_rb'] = prices.loc[i-1, 'portfolio_rb']
-            
-            
+            for symbol in symbols:
+                prices.loc[i, symbol + '_rb'] = prices[symbol + '_rb'][i-1]
 
-prices.to_csv('out/permanent_portfolio.csv')
+            prices.loc[i, 'portfolio_rb'] = prices['portfolio_rb'][i-1]
+
+
+
+
+weekday = datetime.today().weekday()
+
+
+prices.to_csv('out/permanent_portfolio_' + str(weekday) + '.csv')
+prices.to_csv('quote/permanent_portfolio.csv')
+prices.to_json('quote/permanent_portfolio.json', orient='index')
+prices.tail(2).to_json('quote/permanent_portfolio_latest.json', orient='records')
 
 
 prices.set_index('Date', inplace=True)
 
-returns = prices.loc[:, ['spy', 'gld', 'tlt', 'portfolio']].to_returns().dropna()
+# returns = prices.loc[:, ['spy', 'gld', 'tlt', 'portfolio']].to_returns().dropna()
+# print(returns.corr().as_format('.2f'))
 
-
-#print(returns.corr().as_format('.2f'))
-
-perf = prices.loc[:, ['spy', 'gld', 'tlt', 'portfolio']].calc_stats()
-#print(perf.display())
-
-
+perf = prices.loc[:, ['vti', 'gld', 'tlt', 'bil', 'portfolio']].calc_stats()
+perf.display()
+                
 
 fig = plt.figure(constrained_layout=True, figsize=(10, 5))
 spec = fig.add_gridspec(ncols=1, nrows=2, height_ratios=[3, 1])
 
 ax1 = fig.add_subplot(spec[0, 0])
-# ax1.plot(df['gld_twr'], label='GLD', linewidth=1)
-# ax1.plot(df['spy_twr'], label='SPY', linewidth=1)
-# ax1.plot(df['tlt_twr'], label='TLT', linewidth=1)
 ax1.plot(prices['portfolio'], label='Portfolio', linewidth=2)
 ax1.legend(loc='upper left')
-# ax1.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
 ax1.grid(True)
 
 ax2 = fig.add_subplot(spec[1, 0])
@@ -83,8 +85,19 @@ ax2.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
 ax2.grid(True)
 
 
-plt.savefig('out/permanent_portfolio.png')
+plt.savefig('out/permanent_portfolio_' + str(weekday) + '.png')
 plt.close()
 
 
-perf['portfolio'].return_table.to_excel('out/permanent_portfolio_monthly_returns.xlsx')
+
+for symbol in symbols:
+    perf[symbol].stats.to_csv('out/' + symbol + '_stats_' + str(weekday) + '.csv')
+    perf[symbol].stats.to_json('quote/' + symbol + '_stats.json')
+    perf[symbol].return_table.to_csv('out/' + symbol + '_monthly_returns_' + str(weekday) + '.csv')
+    perf[symbol].return_table.to_json('quote/' + symbol + '.json', orient='index')
+
+
+perf['portfolio'].stats.to_csv('out/permanent_portfolio_stats_' + str(weekday) + '.csv')
+perf['portfolio'].stats.to_json('quote/permanent_portfolio_stats.json')
+perf['portfolio'].return_table.to_csv('out/permanent_portfolio_monthly_returns_' + str(weekday) + '.csv')
+perf['portfolio'].return_table.to_json('quote/permanent_portfolio_monthly_returns.json', orient='index')
