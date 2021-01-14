@@ -100,3 +100,4 @@ perf['portfolio'].stats.to_csv('out/invincible_portfolio_stats_' + str(weekday) 
 perf['portfolio'].stats.to_json('quote/invincible_portfolio_stats.json')
 perf['portfolio'].return_table.to_csv('out/invincible_portfolio_monthly_returns_' + str(weekday) + '.csv')
 perf['portfolio'].return_table.to_json('quote/invincible_portfolio_monthly_returns.json', orient='index')
+
