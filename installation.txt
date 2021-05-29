@@ -1,0 +1,17 @@
+py -3 -m venv .venv
+.\.venv\Scripts\activate
+pip install -r requirements.txt 
+
+or
+
+pip install ffn
+pip install s3fs
+
+
+CREATE .aws/credentials in current user directory
+[default]
+aws_access_key_id=XXX
+aws_secret_access_key=XXX
+
+
+pip freeze > requirements.txt
