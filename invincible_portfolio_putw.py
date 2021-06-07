@@ -15,17 +15,16 @@ import matplotlib.ticker as mtick
 import matplotlib.gridspec as gridspec
 
 
-prices = ffn.get('GLD, VTI, TLT, BIL', start='2005-01-01')
+prices = ffn.get('GLD, PUTW, TLT', start='2005-01-01')
 
 prices = prices.reset_index()
 prices['portfolio'] = 100
 prices['gld_rb'] = 0
-prices['vti_rb'] = 0
+prices['putw_rb'] = 0
 prices['tlt_rb'] = 0
-prices['bil_rb'] = 0
 prices['portfolio_rb'] = 100
 
-symbols = ['gld', 'vti', 'tlt', 'bil']
+symbols = ['gld', 'putw', 'tlt']
 
 
 for i in prices.index:
@@ -36,7 +35,11 @@ for i in prices.index:
         prices.loc[i, 'portfolio_rb'] = 100
         
     else:
-        prices.loc[i, 'portfolio'] = prices['portfolio_rb'][i-1] * ((prices['vti'][i] / prices['vti_rb'][i-1] + prices['tlt'][i] / prices['tlt_rb'][i-1] + prices['gld'][i] / prices['gld_rb'][i-1] + prices['bil'][i] / prices['bil_rb'][i-1]) / 4)
+        pct_change = (prices['putw'][i] / prices['putw_rb'][i-1]) -1
+        pct_change += ((prices['tlt'][i] / prices['tlt_rb'][i-1]) -1) * 0.3
+        pct_change += ((prices['gld'][i] / prices['gld_rb'][i-1]) -1) * 0.3
+        
+        prices.loc[i, 'portfolio'] = prices['portfolio_rb'][i-1] * (1+ pct_change)
         
         if(i != len(prices)-1 and prices.Date[i].month % 3 == 0 and prices.Date[i+1].month % 3 == 1):
             for symbol in symbols:
@@ -55,10 +58,10 @@ for i in prices.index:
 weekday = datetime.today().weekday()
 
 
-prices.to_csv('out/permanent_portfolio_' + str(weekday) + '.csv')
-prices.to_csv('quote/permanent_portfolio.csv')
-prices.to_json('quote/permanent_portfolio.json', orient='index')
-prices.tail(2).to_json('quote/permanent_portfolio_latest.json', orient='records')
+prices.to_csv('out/invincible_portfolio_putw_' + str(weekday) + '.csv')
+prices.to_csv('quote/invincible_portfolio_putw.csv')
+prices.to_json('quote/invincible_portfolio_putw.json', orient='index')
+prices.tail(2).to_json('quote/invincible_portfolio_putw_latest.json', orient='records')
 
 
 prices.set_index('Date', inplace=True)
@@ -66,8 +69,8 @@ prices.set_index('Date', inplace=True)
 # returns = prices.loc[:, ['spy', 'gld', 'tlt', 'portfolio']].to_returns().dropna()
 # print(returns.corr().as_format('.2f'))
 
-perf = prices.loc[:, ['vti', 'gld', 'tlt', 'bil', 'portfolio']].calc_stats()
-perf.display()
+perf = prices.loc[:, ['gld', 'putw', 'tlt', 'portfolio']].calc_stats()
+
                 
 
 fig = plt.figure(constrained_layout=True, figsize=(10, 5))
@@ -85,7 +88,7 @@ ax2.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
 ax2.grid(True)
 
 
-plt.savefig('out/permanent_portfolio_' + str(weekday) + '.png')
+plt.savefig('out/invincible_portfolio_putw_' + str(weekday) + '.png')
 plt.close()
 
 
@@ -97,7 +100,7 @@ for symbol in symbols:
     perf[symbol].return_table.to_json('quote/' + symbol + '.json', orient='index')
 
 
-perf['portfolio'].stats.to_csv('out/permanent_portfolio_stats_' + str(weekday) + '.csv')
-perf['portfolio'].stats.to_json('quote/permanent_portfolio_stats.json')
-perf['portfolio'].return_table.to_csv('out/permanent_portfolio_monthly_returns_' + str(weekday) + '.csv')
-perf['portfolio'].return_table.to_json('quote/permanent_portfolio_monthly_returns.json', orient='index')
+perf['portfolio'].stats.to_csv('out/invincible_portfolio_putw_stats_' + str(weekday) + '.csv')
+perf['portfolio'].stats.to_json('quote/invincible_portfolio_putw_stats.json')
+perf['portfolio'].return_table.to_csv('out/invincible_portfolio_putw_monthly_returns_' + str(weekday) + '.csv')
+perf['portfolio'].return_table.to_json('quote/invincible_portfolio_putw_monthly_returns.json', orient='index')

@@ -6,6 +6,7 @@ Created on Fri Feb 21 10:22:27 2020
 """
 
 from datetime import datetime
+import io
 import json
 
 import ffn
@@ -13,6 +14,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.ticker as mtick
 import matplotlib.gridspec as gridspec
+import s3fs
 
 
 prices = ffn.get('GLD, SPY, TLT', start='2005-01-01')
@@ -61,6 +63,14 @@ prices.to_json('quote/invincible_portfolio.json', orient='index')
 prices.tail(2).to_json('quote/invincible_portfolio_latest.json', orient='records')
 
 
+s3_bucket = 's3://app.invincibleportfolio.com'
+prices.to_csv(s3_bucket + '/out/invincible_portfolio_' + str(weekday) + '.csv')
+prices.to_csv(s3_bucket + '/quote/invincible_portfolio.csv')
+prices.to_json(s3_bucket + '/quote/invincible_portfolio.json', orient='index')
+prices.tail(2).to_json(s3_bucket + '/quote/invincible_portfolio_latest.json', orient='records')
+
+
+
 prices.set_index('Date', inplace=True)
 
 # returns = prices.loc[:, ['spy', 'gld', 'tlt', 'portfolio']].to_returns().dropna()
@@ -86,6 +96,11 @@ ax2.grid(True)
 
 
 plt.savefig('out/invincible_portfolio_' + str(weekday) + '.png')
+
+img_data = io.BytesIO()
+plt.savefig(img_data, format='png')
+img_data.seek(0)
+
 plt.close()
 
 
