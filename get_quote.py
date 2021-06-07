@@ -13,7 +13,7 @@ token = 'pk_1dafd28f39414e6fa735c9350a508a47'
 
 while 1:
     now = datetime.now()
-    if now.hour <= 6 or now.hour >= 21:
+    if now.hour <= 6 or now.hour >= 11:
         try:
             r = requests.get(api_url + endpoint + '?token=' + token + '&symbols=gld,spy,tlt&filter=symbol,open,latestPrice,latestUpdate,isUSMarketOpen')
 

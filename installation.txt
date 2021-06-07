@@ -1,0 +1,9 @@
+pip install fastapi uvicorn
+
+
+#Build the Docker image
+docker build -t invincible-fastapi .
+
+docker tag invincible-fastapi terrysclaw/invincible-fastapi
+
+docker push terrysclaw/invincible-fastapi

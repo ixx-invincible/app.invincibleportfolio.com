@@ -15,8 +15,8 @@ import matplotlib.ticker as mtick
 import matplotlib.gridspec as gridspec
 
 
-# prices = ffn.get('GLD, SPY, TLT', start='2005-01-01')
-prices = ffn.get('GLD, SPY, TLT', start='2014-01-01')
+prices = ffn.get('GLD, SPY, TLT', start='2005-01-01')
+# prices = ffn.get('GLD, SPY, TLT', start='2014-01-01')
 
 prices = prices.reset_index()
 prices['portfolio'] = 100
