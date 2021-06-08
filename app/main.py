@@ -1,14 +1,20 @@
+import asyncio
+
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from typing import List
 from pydantic import AnyHttpUrl
 from starlette.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+from app.cron_job import BackgroundRunner
 from app.quote import get_iex_quotes
 
 
 
+
 app = FastAPI()
+runner = BackgroundRunner()
 
 
 BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = [
@@ -26,10 +32,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 
 @app.on_event("startup")
-async def startup_event():
-    print("app startup...")
+async def app_startup():
+    asyncio.create_task(runner.run_main())
+
 
 
 @app.get("/")
@@ -40,5 +49,3 @@ def read_root():
 @app.get("/quotes")
 def get_quotes():
     return JSONResponse(content=get_iex_quotes())
-
-
