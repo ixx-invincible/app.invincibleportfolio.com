@@ -9,7 +9,7 @@ from fastapi.responses import JSONResponse
 
 from app.cron_job import BackgroundRunner
 from app.quote import get_iex_quotes
-
+from app.portfolio import calculate_invincible_portfolio
 
 
 
@@ -20,8 +20,14 @@ runner = BackgroundRunner()
 BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = [
         "http://localhost",
         "http://localhost:4200",
+        "http://localhost:4201",
+        "http://localhost:4202",
         "http://geb.ixx.cc",
         "https://geb.ixx.cc",
+        "http://invincibleportfolio.com",
+        "https://invincibleportfolio.com",
+        "http://www.invincibleportfolio.com",
+        "https://www.invincibleportfolio.com",
     ]
 
 app.add_middleware(
@@ -49,3 +55,9 @@ def read_root():
 @app.get("/quotes")
 def get_quotes():
     return JSONResponse(content=get_iex_quotes())
+
+
+@app.get("/invincible_portfolio")
+def calculate():
+    calculate_invincible_portfolio()
+    return {"message": "done"}
