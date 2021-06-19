@@ -5,7 +5,7 @@ Created on Fri Feb 21 10:22:27 2020
 @author: TerryLaw
 """
 
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 import ffn
 import matplotlib.pyplot as plt
@@ -15,8 +15,11 @@ import matplotlib.gridspec as gridspec
 
 
 def calculate_invincible_portfolio():
-    prices = ffn.get('GLD, SPY, TLT', start='2005-01-01', end=datetime.today())
-
+    if datetime.now(timezone.utc).astimezone().tzinfo.utcoffset(None)==timedelta(seconds=28800):
+        prices = ffn.get('GLD, SPY, TLT', start='2005-01-01', end=datetime.today())
+    else:
+        prices = ffn.get('GLD, SPY, TLT', start='2004-12-31', end=datetime.today())
+    
     prices = prices.reset_index()
     prices['portfolio'] = 100
     prices['gld_rb'] = 0
@@ -83,6 +86,7 @@ def export(prices, portfolio):
 
 
     plt.savefig('static/' + portfolio + '_' + str(weekday) + '.png')
+    plt.savefig('static/' + portfolio + '_latest.png')
     plt.close()
 
 
