@@ -15,7 +15,7 @@ import matplotlib.gridspec as gridspec
 
 
 def calculate_invincible_portfolio():
-    prices = ffn.get('GLD, SPY, TLT', start='2005-01-01')
+    prices = ffn.get('GLD, SPY, TLT', start='2005-01-01', end=datetime.today())
 
     prices = prices.reset_index()
     prices['portfolio'] = 100
@@ -99,3 +99,5 @@ def export(prices, portfolio):
     perf['portfolio'].return_table.to_csv('static/' + portfolio + '_monthly_returns_' + str(weekday) + '.csv')
     perf['portfolio'].return_table.to_json('static/' + portfolio + '_monthly_returns.json', orient='index')
 
+
+# calculate_invincible_portfolio()
