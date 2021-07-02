@@ -51,11 +51,14 @@ def calculate_invincible_portfolio():
 
                 prices.loc[i, 'portfolio_rb'] = prices['portfolio_rb'][i-1]
 
-    export(prices, 'invincible_portfolio')
+    
+    symbols = symbols.push('portfolio')
+    # print(symbols)
+    export(prices, 'invincible_portfolio', symbols)
 
 
 
-def export(prices, portfolio):
+def export(prices, portfolio, symbols):
     weekday = datetime.today().weekday()
 
     prices.to_csv('static/' + portfolio + str(weekday) + '.csv')
@@ -67,7 +70,7 @@ def export(prices, portfolio):
 
     prices.set_index('Date', inplace=True)
 
-    perf = prices.loc[:, ['spy', 'gld', 'tlt', 'portfolio']].calc_stats()
+    perf = prices.loc[:, symbols].calc_stats()
                     
 
     fig = plt.figure(constrained_layout=True, figsize=(10, 5))
@@ -90,7 +93,7 @@ def export(prices, portfolio):
     plt.close()
 
 
-    symbols = ['gld', 'spy', 'tlt']
+    # symbols = ['gld', 'spy', 'tlt']
     for symbol in symbols:
         perf[symbol].stats.to_csv('static/' + symbol + '_stats_' + str(weekday) + '.csv')
         perf[symbol].stats.to_json('static/' + symbol + '_stats.json')
@@ -104,4 +107,4 @@ def export(prices, portfolio):
     perf['portfolio'].return_table.to_json('static/' + portfolio + '_monthly_returns.json', orient='index')
 
 
-# calculate_invincible_portfolio()
+calculate_invincible_portfolio()
