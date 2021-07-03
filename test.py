@@ -11,10 +11,12 @@ import ffn
 
 # fs = s3fs.S3FileSystem(anon=False)
 
-prices = ffn.get('GLD, SPY, TLT', start='2005-01-01')
+prices = ffn.get('GLD, SPY, TLT', provider='iex', start='2021-01-01')
 weekday = datetime.today().weekday()
 
-prices.to_csv('s3://app.invincibleportfolio.com/out/invincible_portfolio_' + str(weekday) + '.csv')
+print(prices.tail())
+
+# prices.to_csv('s3://app.invincibleportfolio.com/out/invincible_portfolio_' + str(weekday) + '.csv')
 
 # prices.to_csv('out/invincible_portfolio_' + str(weekday) + '.csv')
 
