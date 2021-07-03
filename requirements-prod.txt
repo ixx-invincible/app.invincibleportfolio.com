@@ -4,3 +4,4 @@ aiofiles
 requests
 ffn
 matplotlib
+yfinance

@@ -12,6 +12,8 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.ticker as mtick
 import matplotlib.gridspec as gridspec
+import yfinance as yfin
+yfin.pdr_override()
 
 
 def calculate_invincible_portfolio():
@@ -52,9 +54,52 @@ def calculate_invincible_portfolio():
                 prices.loc[i, 'portfolio_rb'] = prices['portfolio_rb'][i-1]
 
     
-    symbols = symbols.push('portfolio')
-    # print(symbols)
+    symbols.append('portfolio')
     export(prices, 'invincible_portfolio', symbols)
+
+
+def calculate_invincible_portfolio2():
+    if datetime.now(timezone.utc).astimezone().tzinfo.utcoffset(None)==timedelta(seconds=28800):
+        prices = ffn.get('GLD, SPY, QQQ, TLT, IEF', start='2005-01-01', end=datetime.today())
+    else:
+        prices = ffn.get('GLD, SPY, QQQ, TLT, IEF', start='2004-12-31', end=datetime.today())
+    
+    prices = prices.reset_index()
+    prices['portfolio'] = 100
+    prices['gld_rb'] = 0
+    prices['spy_rb'] = 0
+    prices['qqq_rb'] = 0
+    prices['tlt_rb'] = 0
+    prices['ief_rb'] = 0
+    prices['portfolio_rb'] = 100
+
+    symbols = ['gld', 'spy', 'qqq', 'tlt', 'ief']
+
+    for i in prices.index:
+        if i == 0:
+            for symbol in symbols:
+                prices.loc[i, symbol + '_rb'] = prices[symbol][0]
+
+            prices.loc[i, 'portfolio_rb'] = 100
+            
+        else:
+            prices.loc[i, 'portfolio'] = prices['portfolio_rb'][i-1] * ((prices['spy'][i] / prices['spy_rb'][i-1] + prices['qqq'][i] / prices['qqq_rb'][i-1] + prices['tlt'][i] / prices['tlt_rb'][i-1] + prices['ief'][i] / prices['ief_rb'][i-1] + prices['gld'][i] / prices['gld_rb'][i-1]) / 5)
+            
+            # Quarter-end rebalancing
+            if(i != len(prices)-1 and prices.Date[i].month % 3 == 0 and prices.Date[i+1].month % 3 == 1):
+                for symbol in symbols:
+                    prices.loc[i, symbol + '_rb'] = prices[symbol][i]
+
+                prices.loc[i, 'portfolio_rb'] = prices['portfolio'][i]
+            else:
+                for symbol in symbols:
+                    prices.loc[i, symbol + '_rb'] = prices[symbol + '_rb'][i-1]
+
+                prices.loc[i, 'portfolio_rb'] = prices['portfolio_rb'][i-1]
+
+    
+    symbols.append('portfolio')
+    export(prices, 'invincible_portfolio_5x20', symbols)
 
 
 
@@ -93,7 +138,6 @@ def export(prices, portfolio, symbols):
     plt.close()
 
 
-    # symbols = ['gld', 'spy', 'tlt']
     for symbol in symbols:
         perf[symbol].stats.to_csv('static/' + symbol + '_stats_' + str(weekday) + '.csv')
         perf[symbol].stats.to_json('static/' + symbol + '_stats.json')
@@ -107,4 +151,4 @@ def export(prices, portfolio, symbols):
     perf['portfolio'].return_table.to_json('static/' + portfolio + '_monthly_returns.json', orient='index')
 
 
-calculate_invincible_portfolio()
+# calculate_invincible_portfolio2()

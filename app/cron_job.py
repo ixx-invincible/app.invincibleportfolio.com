@@ -1,6 +1,6 @@
 import asyncio
 from datetime import datetime
-from app.portfolio import calculate_invincible_portfolio
+from app.portfolio import calculate_invincible_portfolio, calculate_invincible_portfolio2
 
 
 
@@ -19,6 +19,8 @@ class BackgroundRunner:
                 # if now.minute % 5 == 0:
                     print(now, "exec calculate_invincible_portfolio() job")
                     calculate_invincible_portfolio()
+                    print(now, "exec calculate_invincible_portfolio2() job")
+                    calculate_invincible_portfolio2()
 
             self.min = now.minute
             self.hour = now.hour
