@@ -116,26 +116,32 @@ def export(prices, portfolio, symbols):
     prices.set_index('Date', inplace=True)
 
     perf = prices.loc[:, symbols].calc_stats()
+
+    plot_equity_curve(prices, perf, 1, portfolio)
+    plot_equity_curve(prices, perf, 3, portfolio)
+    plot_equity_curve(prices, perf, 5, portfolio)
+    plot_equity_curve(prices, perf, 10, portfolio)
+    plot_equity_curve(prices, perf, 20, portfolio)
                     
 
-    fig = plt.figure(constrained_layout=True, figsize=(10, 5))
-    spec = fig.add_gridspec(ncols=1, nrows=2, height_ratios=[3, 1])
+    # fig = plt.figure(constrained_layout=True, figsize=(10, 5))
+    # spec = fig.add_gridspec(ncols=1, nrows=2, height_ratios=[3, 1])
 
-    ax1 = fig.add_subplot(spec[0, 0])
-    ax1.plot(prices['portfolio'], label=portfolio, linewidth=2)
-    ax1.legend(loc='upper left')
-    ax1.grid(True)
+    # ax1 = fig.add_subplot(spec[0, 0])
+    # ax1.plot(prices['portfolio'], label=portfolio, linewidth=2)
+    # ax1.legend(loc='upper left')
+    # ax1.grid(True)
 
-    ax2 = fig.add_subplot(spec[1, 0])
-    ax2.plot(perf['portfolio'].prices.to_drawdown_series(), label='Drawdown')
-    ax2.legend(loc='lower left')
-    ax2.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
-    ax2.grid(True)
+    # ax2 = fig.add_subplot(spec[1, 0])
+    # ax2.plot(perf['portfolio'].prices.to_drawdown_series(), label='Drawdown')
+    # ax2.legend(loc='lower left')
+    # ax2.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
+    # ax2.grid(True)
 
 
-    plt.savefig('static/' + portfolio + '_' + str(weekday) + '.png')
-    plt.savefig('static/' + portfolio + '_latest.png')
-    plt.close()
+    # plt.savefig('static/' + portfolio + '_' + str(weekday) + '.png')
+    # plt.savefig('static/' + portfolio + '_latest.png')
+    # plt.close()
 
 
     for symbol in symbols:
@@ -151,4 +157,32 @@ def export(prices, portfolio, symbols):
     perf['portfolio'].return_table.to_json('static/' + portfolio + '_monthly_returns.json', orient='index')
 
 
-# calculate_invincible_portfolio2()
+
+def plot_equity_curve(prices, perf, years, portfolio):
+    weekday = datetime.today().weekday()
+
+    fig = plt.figure(constrained_layout=True, figsize=(10, 5))
+    spec = fig.add_gridspec(ncols=1, nrows=2, height_ratios=[3, 1])
+
+    ax1 = fig.add_subplot(spec[0, 0])
+    ax1.plot(prices['portfolio'].tail(years*252), label=portfolio+' ('+str(years)+' year)', linewidth=2)
+    ax1.legend(loc='upper left')
+    ax1.grid(True)
+
+    ax2 = fig.add_subplot(spec[1, 0])
+    ax2.plot(perf['portfolio'].prices.to_drawdown_series().tail(years*252), label='Drawdown')
+    ax2.legend(loc='lower left')
+    ax2.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
+    ax2.grid(True)
+
+
+    if(years == 20):
+        plt.savefig('static/' + portfolio + '_' + str(weekday) + '.png')
+        plt.savefig('static/' + portfolio + '_latest.png')
+    else:
+        plt.savefig('static/' + portfolio + '_' + str(years) + '_' + str(weekday) + '.png')
+        plt.savefig('static/' + portfolio + '_' + str(years) + '_latest.png')
+
+    plt.close()
+
+# calculate_invincible_portfolio()
