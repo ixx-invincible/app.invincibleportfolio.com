@@ -24,6 +24,8 @@ BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = [
         "http://localhost:4202",
         "http://geb.ixx.cc",
         "https://geb.ixx.cc",
+        "http://etc.ixx.cc",
+        "https://etc.ixx.cc",
         "http://invincibleportfolio.com",
         "https://invincibleportfolio.com",
         "http://www.invincibleportfolio.com",
