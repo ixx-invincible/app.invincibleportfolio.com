@@ -8,7 +8,7 @@ from starlette.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.cron_job import BackgroundRunner
-from app.quote import get_iex_quotes
+from app.quote import get_iex_quotes, get_yahoo_quotes, get_live_quote
 from app.portfolio import calculate_invincible_portfolio, calculate_invincible_portfolio2
 
 
@@ -57,6 +57,19 @@ def read_root():
 @app.get("/quotes")
 def get_quotes():
     return JSONResponse(content=get_iex_quotes())
+    # return get_yahoo_quotes()
+
+
+@app.get("/yahoo_quote")
+def yahoo_quote():
+    get_yahoo_quotes()
+    return {"message": "done"}
+
+
+@app.get("/live_quote")
+def live_quote():
+    return get_live_quote()
+    
 
 
 @app.get("/invincible_portfolio")

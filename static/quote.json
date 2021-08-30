@@ -1,0 +1,29 @@
+[
+    {
+        "latestPrice": 170.19000244140625,
+        "open": 167.58,
+        "previousClose": 167.67,
+        "symbol": "gld",
+        "week52High": 186.99,
+        "week52Low": 157.13,
+        "ytdChange": "-6.43%"
+    },
+    {
+        "latestPrice": 450.25,
+        "open": 447.12,
+        "previousClose": 446.26,
+        "symbol": "spy",
+        "week52High": 450.65,
+        "week52Low": 319.8,
+        "ytdChange": "19.94%"
+    },
+    {
+        "latestPrice": 149.4600067138672,
+        "open": 148.57,
+        "previousClose": 148.45,
+        "symbol": "tlt",
+        "week52High": 167.24,
+        "week52Low": 133.19,
+        "ytdChange": "-5.12%"
+    }
+]

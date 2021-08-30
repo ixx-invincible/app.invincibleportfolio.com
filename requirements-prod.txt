@@ -5,3 +5,4 @@ requests
 ffn
 matplotlib
 yfinance
+yahoo_fin

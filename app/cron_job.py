@@ -1,7 +1,7 @@
 import asyncio
 from datetime import datetime
 from app.portfolio import calculate_invincible_portfolio
-
+from app.quote import get_yahoo_quotes
 
 
 class BackgroundRunner:
@@ -20,7 +20,11 @@ class BackgroundRunner:
                     print(now, "exec calculate_invincible_portfolio() job")
                     calculate_invincible_portfolio()
 
+                    print(now, "get yahoo quote")
+                    get_yahoo_quotes()
+
+
             self.min = now.minute
             self.hour = now.hour
             
-            await asyncio.sleep(60)
+            await asyncio.sleep(5)
