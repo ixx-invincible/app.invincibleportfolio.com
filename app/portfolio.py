@@ -186,20 +186,19 @@ def calculate_invincible_portfolio4():
 
 def calculate_invincible_portfolio5():
     if datetime.now(timezone.utc).astimezone().tzinfo.utcoffset(None)==timedelta(seconds=28800):
-        prices = ffn.get('TQQQ, UPRO, TMF, TYD, GLD', start='2010-01-01', end=datetime.today())
+        prices = ffn.get('TQQQ, UPRO, TMF, GLD', start='2010-01-01', end=datetime.today())
     else:
-        prices = ffn.get('TQQQ, UPRO, TMF, TYD, GLD', start='2009-12-31', end=datetime.today())
+        prices = ffn.get('TQQQ, UPRO, TMF, GLD', start='2009-12-31', end=datetime.today())
     
     prices = prices.reset_index()
     prices['portfolio'] = 100
     prices['tqqq_rb'] = 0
     prices['upro_rb'] = 0
     prices['tmf_rb'] = 0
-    prices['tyd_rb'] = 0
     prices['gld_rb'] = 0
     prices['portfolio_rb'] = 100
 
-    symbols = ['tqqq', 'upro', 'tmf', 'tyd', 'gld']
+    symbols = ['tqqq', 'upro', 'tmf', 'gld']
 
     for i in prices.index:
         if i == 0:
@@ -212,8 +211,7 @@ def calculate_invincible_portfolio5():
             prices.loc[i, 'portfolio'] = prices['portfolio_rb'][i-1] * (
                     (prices['tqqq'][i] / prices['tqqq_rb'][i-1]) * 0.15 +
                     (prices['upro'][i] / prices['upro_rb'][i-1]) * 0.15 +
-                    (prices['tmf'][i] / prices['tmf_rb'][i-1]) * 0.15 +
-                    (prices['tyd'][i] / prices['tyd_rb'][i-1]) * 0.15 +
+                    (prices['tmf'][i] / prices['tmf_rb'][i-1]) * 0.30 +
                     (prices['gld'][i] / prices['gld_rb'][i-1]) * 0.40
                 )
             
@@ -231,8 +229,53 @@ def calculate_invincible_portfolio5():
 
     
     symbols.append('portfolio')
-    export(prices, 'invincible_portfolio_tqqq15_upro15_tmf15_tyd15_gld40', symbols)
+    export(prices, 'invincible_portfolio_tqqq15_upro15_tmf30_gld40', symbols)
 
+
+def calculate_invincible_portfolio6():
+    if datetime.now(timezone.utc).astimezone().tzinfo.utcoffset(None)==timedelta(seconds=28800):
+        prices = ffn.get('UPRO, TMF, GLD', start='2010-01-01', end=datetime.today())
+    else:
+        prices = ffn.get('UPRO, TMF, GLD', start='2009-12-31', end=datetime.today())
+    
+    prices = prices.reset_index()
+    prices['portfolio'] = 100
+    prices['upro_rb'] = 0
+    prices['tmf_rb'] = 0
+    prices['gld_rb'] = 0
+    prices['portfolio_rb'] = 100
+
+    symbols = ['upro', 'tmf', 'gld']
+
+    for i in prices.index:
+        if i == 0:
+            for symbol in symbols:
+                prices.loc[i, symbol + '_rb'] = prices[symbol][0]
+
+            prices.loc[i, 'portfolio_rb'] = 100
+            
+        else:
+            prices.loc[i, 'portfolio'] = prices['portfolio_rb'][i-1] * (
+                    (prices['upro'][i] / prices['upro_rb'][i-1]) * 0.25 +
+                    (prices['tmf'][i] / prices['tmf_rb'][i-1]) * 0.25 +
+                    (prices['gld'][i] / prices['gld_rb'][i-1]) * 0.50
+                )
+            
+            # Quarter-end rebalancing
+            if(i != len(prices)-1 and prices.Date[i].month % 3 == 0 and prices.Date[i+1].month % 3 == 1):
+                for symbol in symbols:
+                    prices.loc[i, symbol + '_rb'] = prices[symbol][i]
+
+                prices.loc[i, 'portfolio_rb'] = prices['portfolio'][i]
+            else:
+                for symbol in symbols:
+                    prices.loc[i, symbol + '_rb'] = prices[symbol + '_rb'][i-1]
+
+                prices.loc[i, 'portfolio_rb'] = prices['portfolio_rb'][i-1]
+
+    
+    symbols.append('portfolio')
+    export(prices, 'invincible_portfolio_upro25_tmf25_gld50', symbols)
 
 def export(prices, portfolio, symbols):
     weekday = datetime.today().weekday()
@@ -254,26 +297,6 @@ def export(prices, portfolio, symbols):
     plot_equity_curve(prices, perf, 10, portfolio)
     plot_equity_curve(prices, perf, 20, portfolio)
                     
-
-    # fig = plt.figure(constrained_layout=True, figsize=(10, 5))
-    # spec = fig.add_gridspec(ncols=1, nrows=2, height_ratios=[3, 1])
-
-    # ax1 = fig.add_subplot(spec[0, 0])
-    # ax1.plot(prices['portfolio'], label=portfolio, linewidth=2)
-    # ax1.legend(loc='upper left')
-    # ax1.grid(True)
-
-    # ax2 = fig.add_subplot(spec[1, 0])
-    # ax2.plot(perf['portfolio'].prices.to_drawdown_series(), label='Drawdown')
-    # ax2.legend(loc='lower left')
-    # ax2.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
-    # ax2.grid(True)
-
-
-    # plt.savefig('static/' + portfolio + '_' + str(weekday) + '.png')
-    # plt.savefig('static/' + portfolio + '_latest.png')
-    # plt.close()
-
 
     for symbol in symbols:
         perf[symbol].stats.to_csv('static/' + symbol + '_stats_' + str(weekday) + '.csv')
@@ -320,3 +343,4 @@ def plot_equity_curve(prices, perf, years, portfolio):
 # calculate_invincible_portfolio3()
 # calculate_invincible_portfolio4()
 calculate_invincible_portfolio5()
+# calculate_invincible_portfolio6()
