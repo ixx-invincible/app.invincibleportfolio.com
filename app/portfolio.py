@@ -165,7 +165,10 @@ def calculate_invincible_portfolio4():
             prices.loc[i, 'portfolio_rb'] = 100
             
         else:
-            prices.loc[i, 'portfolio'] = prices['portfolio_rb'][i-1] * ((prices['tqqq'][i] / prices['tqqq_rb'][i-1]) * 0.55 + (prices['tmf'][i] / prices['tmf_rb'][i-1]) * 0.45)
+            prices.loc[i, 'portfolio'] = prices['portfolio_rb'][i-1] * (
+                (prices['tqqq'][i] / prices['tqqq_rb'][i-1]) * 0.55 + 
+                (prices['tmf'][i] / prices['tmf_rb'][i-1]) * 0.45
+            )
             
             # Quarter-end rebalancing
             if(i != len(prices)-1 and prices.Date[i].month % 3 == 0 and prices.Date[i+1].month % 3 == 1):
@@ -341,6 +344,6 @@ def plot_equity_curve(prices, perf, years, portfolio):
 
 
 # calculate_invincible_portfolio3()
-# calculate_invincible_portfolio4()
-calculate_invincible_portfolio5()
+calculate_invincible_portfolio4()
+# calculate_invincible_portfolio5()
 # calculate_invincible_portfolio6()
