@@ -343,7 +343,8 @@ def plot_equity_curve(prices, perf, years, portfolio):
     plt.close()
 
 
-# calculate_invincible_portfolio3()
+calculate_invincible_portfolio()
+calculate_invincible_portfolio3()
 calculate_invincible_portfolio4()
 # calculate_invincible_portfolio5()
 # calculate_invincible_portfolio6()
