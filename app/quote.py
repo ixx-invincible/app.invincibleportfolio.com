@@ -104,7 +104,7 @@ def get_yahoo_quotes():
 
     try:
         quotes = []
-        for quote in ['gld', 'spy', 'tlt']:
+        for quote in ['gld', 'spy', 'tlt', 'tqqq', 'upro', 'tmf']:
             quotes.append(
                 {
                     "symbol": quote,
@@ -126,7 +126,7 @@ def get_yahoo_quotes():
 def get_live_quote():
     try:
         quotes = []
-        for quote in ['gld', 'spy', 'tlt']:
+        for quote in ['gld', 'spy', 'tlt', 'tqqq', 'upro', 'tmf']:
             quotes.append(
                     {
                         "symbol": quote,

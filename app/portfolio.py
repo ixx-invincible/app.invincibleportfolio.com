@@ -60,20 +60,19 @@ def calculate_invincible_portfolio():
 
 def calculate_invincible_portfolio2():
     if datetime.now(timezone.utc).astimezone().tzinfo.utcoffset(None)==timedelta(seconds=28800):
-        prices = ffn.get('GLD, SPY, QQQ, TLT, IEF', start='2005-01-01', end=datetime.today())
+        prices = ffn.get('TQQQ, UPRO, TMF, GLD', start='2010-01-01', end=datetime.today())
     else:
-        prices = ffn.get('GLD, SPY, QQQ, TLT, IEF', start='2004-12-31', end=datetime.today())
+        prices = ffn.get('TQQQ, UPRO, TMF, GLD', start='2009-12-31', end=datetime.today())
     
     prices = prices.reset_index()
     prices['portfolio'] = 100
+    prices['tqqq_rb'] = 0
+    prices['upro_rb'] = 0
+    prices['tmf_rb'] = 0
     prices['gld_rb'] = 0
-    prices['spy_rb'] = 0
-    prices['qqq_rb'] = 0
-    prices['tlt_rb'] = 0
-    prices['ief_rb'] = 0
     prices['portfolio_rb'] = 100
 
-    symbols = ['gld', 'spy', 'qqq', 'tlt', 'ief']
+    symbols = ['tqqq', 'upro', 'tmf', 'gld']
 
     for i in prices.index:
         if i == 0:
@@ -83,7 +82,12 @@ def calculate_invincible_portfolio2():
             prices.loc[i, 'portfolio_rb'] = 100
             
         else:
-            prices.loc[i, 'portfolio'] = prices['portfolio_rb'][i-1] * ((prices['spy'][i] / prices['spy_rb'][i-1] + prices['qqq'][i] / prices['qqq_rb'][i-1] + prices['tlt'][i] / prices['tlt_rb'][i-1] + prices['ief'][i] / prices['ief_rb'][i-1] + prices['gld'][i] / prices['gld_rb'][i-1]) / 5)
+            prices.loc[i, 'portfolio'] = prices['portfolio_rb'][i-1] * (
+                    (prices['tqqq'][i] / prices['tqqq_rb'][i-1]) * 0.22 +
+                    (prices['upro'][i] / prices['upro_rb'][i-1]) * 0.22 +
+                    (prices['tmf'][i] / prices['tmf_rb'][i-1]) * 0.36 +
+                    (prices['gld'][i] / prices['gld_rb'][i-1]) * 0.20
+                )
             
             # Quarter-end rebalancing
             if(i != len(prices)-1 and prices.Date[i].month % 3 == 0 and prices.Date[i+1].month % 3 == 1):
@@ -99,7 +103,8 @@ def calculate_invincible_portfolio2():
 
     
     symbols.append('portfolio')
-    export(prices, 'invincible_portfolio_5x20', symbols)
+    export(prices, 'invincible_portfolio_tqqq22_upro22_tmf36_gld20', symbols)
+
 
 
 def calculate_invincible_portfolio3():
@@ -187,52 +192,6 @@ def calculate_invincible_portfolio4():
     export(prices, 'invincible_portfolio_tqqq55_tmf45', symbols)
 
 
-def calculate_invincible_portfolio5():
-    if datetime.now(timezone.utc).astimezone().tzinfo.utcoffset(None)==timedelta(seconds=28800):
-        prices = ffn.get('TQQQ, UPRO, TMF, GLD', start='2010-01-01', end=datetime.today())
-    else:
-        prices = ffn.get('TQQQ, UPRO, TMF, GLD', start='2009-12-31', end=datetime.today())
-    
-    prices = prices.reset_index()
-    prices['portfolio'] = 100
-    prices['tqqq_rb'] = 0
-    prices['upro_rb'] = 0
-    prices['tmf_rb'] = 0
-    prices['gld_rb'] = 0
-    prices['portfolio_rb'] = 100
-
-    symbols = ['tqqq', 'upro', 'tmf', 'gld']
-
-    for i in prices.index:
-        if i == 0:
-            for symbol in symbols:
-                prices.loc[i, symbol + '_rb'] = prices[symbol][0]
-
-            prices.loc[i, 'portfolio_rb'] = 100
-            
-        else:
-            prices.loc[i, 'portfolio'] = prices['portfolio_rb'][i-1] * (
-                    (prices['tqqq'][i] / prices['tqqq_rb'][i-1]) * 0.15 +
-                    (prices['upro'][i] / prices['upro_rb'][i-1]) * 0.15 +
-                    (prices['tmf'][i] / prices['tmf_rb'][i-1]) * 0.30 +
-                    (prices['gld'][i] / prices['gld_rb'][i-1]) * 0.40
-                )
-            
-            # Quarter-end rebalancing
-            if(i != len(prices)-1 and prices.Date[i].month % 3 == 0 and prices.Date[i+1].month % 3 == 1):
-                for symbol in symbols:
-                    prices.loc[i, symbol + '_rb'] = prices[symbol][i]
-
-                prices.loc[i, 'portfolio_rb'] = prices['portfolio'][i]
-            else:
-                for symbol in symbols:
-                    prices.loc[i, symbol + '_rb'] = prices[symbol + '_rb'][i-1]
-
-                prices.loc[i, 'portfolio_rb'] = prices['portfolio_rb'][i-1]
-
-    
-    symbols.append('portfolio')
-    export(prices, 'invincible_portfolio_tqqq15_upro15_tmf30_gld40', symbols)
 
 
 def calculate_invincible_portfolio6():
@@ -343,8 +302,8 @@ def plot_equity_curve(prices, perf, years, portfolio):
     plt.close()
 
 
-calculate_invincible_portfolio()
-calculate_invincible_portfolio3()
-calculate_invincible_portfolio4()
-# calculate_invincible_portfolio5()
+# calculate_invincible_portfolio()
+calculate_invincible_portfolio2()
+# calculate_invincible_portfolio3()
+# calculate_invincible_portfolio4()
 # calculate_invincible_portfolio6()
