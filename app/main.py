@@ -10,6 +10,7 @@ from fastapi.responses import JSONResponse
 from app.cron_job import BackgroundRunner
 from app.quote import get_iex_quotes, get_yahoo_quotes, get_live_quote
 from app.portfolio import calculate_invincible_portfolio, calculate_invincible_portfolio2
+from app.etfs import calculate_etfs
 
 
 
@@ -83,4 +84,9 @@ def calculate():
 @app.get("/invincible_portfolio2")
 def calculate2():
     calculate_invincible_portfolio2()
+    return {"message": "done"}
+
+@app.get("/etfs")
+def calculate_etf():
+    calculate_etfs()
     return {"message": "done"}

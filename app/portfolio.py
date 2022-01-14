@@ -352,55 +352,10 @@ def plot_equity_curve(prices, perf, years, portfolio):
 
 
 
-def calculate_etfs():
-    if datetime.now(timezone.utc).astimezone().tzinfo.utcoffset(None)==timedelta(seconds=28800):
-        prices = ffn.get('SPY, UPRO, QQQ, QLD, TQQQ, TLT, TMF, GLD', start='2013-01-01', end=datetime.today())
-    else:
-        prices = ffn.get('SPY, UPRO, QQQ, QLD, TQQQ, TLT, TMF, GLD', start='2012-12-31', end=datetime.today())
-
-    prices.to_csv('static/etfs_latest.csv')
-
-    symbols = ['spy', 'upro', 'qqq', 'qld', 'tqqq', 'tlt', 'tmf', 'gld']
-
-    perf = prices.loc[:, symbols].calc_stats()
-
-    for symbol in symbols:
-        perf[symbol].stats.to_csv('static/' + symbol + '_stats.csv')
-        perf[symbol].return_table.to_csv('static/' + symbol + '_monthly_returns.csv')
-
-
-        fig = plt.figure(constrained_layout=True, figsize=(10, 5))
-        spec = fig.add_gridspec(ncols=1, nrows=2, height_ratios=[3, 1])
-
-        ax1 = fig.add_subplot(spec[0, 0])
-        ax1.plot(prices[symbol], label=symbol, linewidth=2)
-        ax1.legend(loc='upper left')
-        ax1.grid(True)
-
-        ax2 = fig.add_subplot(spec[1, 0])
-        ax2.plot(perf[symbol].prices.to_drawdown_series(), label='Drawdown')
-        ax2.legend(loc='lower left')
-        ax2.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
-        ax2.grid(True)
-
-        plt.savefig('static/' + symbol + '.png')
-
-
-        ### download weekly data
-        df = yfin.download(symbol, start='2013-01-01', end=datetime.today(), interval="1wk", actions=False)
-        df.to_csv('static/' + symbol + '_dividend_weekly.csv')
-
-        new_df = df.dropna(axis = 0, how ='any')
-        new_df.to_csv('static/' + symbol + '_weekly.csv')
-            
-    
-    
-# calculate_invincible_portfolio()
+calculate_invincible_portfolio()
 # calculate_invincible_portfolio2()
 # calculate_invincible_portfolio3()
 # calculate_invincible_portfolio4()
 # calculate_invincible_portfolio5()
 # calculate_invincible_portfolio6()
 # calculate_invincible_portfolio7()
-
-calculate_etfs()

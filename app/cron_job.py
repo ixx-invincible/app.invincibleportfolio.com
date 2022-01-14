@@ -1,6 +1,7 @@
 import asyncio
 from datetime import datetime
 from app.portfolio import calculate_invincible_portfolio, calculate_invincible_portfolio2
+from app.etfs import calculate_etfs
 from app.quote import get_yahoo_quotes
 
 
@@ -19,6 +20,7 @@ class BackgroundRunner:
                     print(now, "exec calculate_invincible_portfolio() job")
                     calculate_invincible_portfolio()
                     calculate_invincible_portfolio2()
+                    calculate_etfs()
 
                     print(now, "get yahoo quote")
                     get_yahoo_quotes()
