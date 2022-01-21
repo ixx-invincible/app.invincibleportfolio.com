@@ -63,10 +63,11 @@ def calculate_ifree_growth_and_income_fund():
     
 def calculate_ifree_da():
     if datetime.now(timezone.utc).astimezone().tzinfo.utcoffset(None)==timedelta(seconds=28800):
-        prices = ffn.get('TQQQ, TMF, GLD, QLD', start='2011-01-01', end='2022-01-01')
+        prices = ffn.get('TQQQ, TMF, GLD, QLD', start='2011-01-01', end=datetime.today())
     else:
-        prices = ffn.get('TQQQ, TMF, GLD, QLD', start='2010-12-31', end='2021-12-31')
+        prices = ffn.get('TQQQ, TMF, GLD, QLD', start='2010-12-31', end=datetime.today())
     
+
     prices = prices.reset_index()
     prices['portfolio'] = 100
     prices['tqqq_rb'] = 0
@@ -105,9 +106,13 @@ def calculate_ifree_da():
     
     symbols.append('portfolio')
 
+    prices.to_csv('static/tqqq_tmf_gld_qld.csv')
+
     
     ### Plot for Fact Sheet
+    prices.set_index("Date", inplace = True)
     perf = prices.loc[:, symbols].calc_stats()
+    # perf = prices['portfolio'].calc_stats()
 
     fig = plt.figure(constrained_layout=True, figsize=(10, 5))
     spec = fig.add_gridspec(ncols=1, nrows=2, height_ratios=[3, 1])
@@ -123,6 +128,7 @@ def calculate_ifree_da():
 
     ax2 = fig.add_subplot(spec[1, 0])
     ax2.plot(perf['portfolio'].prices.to_drawdown_series(), label='Drawdown')
+    # ax2.plot(perf.prices.to_drawdown_series(), label='Drawdown')
     ax2.legend(loc='lower left')
     ax2.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
     ax2.grid(True)
@@ -148,6 +154,7 @@ def calculate_ifree_da():
 
     ax2 = fig.add_subplot(spec[1, 0])
     ax2.plot(perf['portfolio'].prices.to_drawdown_series(), label='最大回徹', linewidth=2)
+    # ax2.plot(perf.prices.to_drawdown_series(), label='最大回徹', linewidth=2)
     ax2.legend(loc='lower left')
     ax2.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
     ax2.grid(True)
