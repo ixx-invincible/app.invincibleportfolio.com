@@ -105,15 +105,16 @@ def get_yahoo_quotes():
     try:
         quotes = []
         for quote in ['gld', 'spy', 'tlt', 'tqqq', 'upro', 'tmf']:
+            quote_table = si.get_quote_table(quote)
             quotes.append(
                 {
                     "symbol": quote,
-                    "previousClose": si.get_quote_table(quote).get('Previous Close'),
-                    "open": si.get_quote_table(quote).get('Open'),
-                    "latestPrice": si.get_quote_table(quote).get('Quote Price'),
-                    "week52Low": float(si.get_quote_table(quote).get('52 Week Range').split(" - ")[0]),
-                    "week52High": float(si.get_quote_table(quote).get('52 Week Range').split(" - ")[1]),
-                    "ytdChange": si.get_quote_table(quote).get('YTD Daily Total Return'),
+                    "previousClose": quote_table.get('Previous Close'),
+                    "open": quote_table.get('Open'),
+                    "latestPrice": quote_table.get('Quote Price'),
+                    "week52Low": float(quote_table.get('52 Week Range').split(" - ")[0]),
+                    "week52High": float(quote_table.get('52 Week Range').split(" - ")[1]),
+                    "ytdChange": quote_table.get('YTD Daily Total Return'),
                 }
             )
 
@@ -140,3 +141,4 @@ def get_live_quote():
         return []
 
 
+get_yahoo_quotes()

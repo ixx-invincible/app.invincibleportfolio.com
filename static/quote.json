@@ -1,56 +1,56 @@
 [
     {
-        "latestPrice": 166.80999755859375,
-        "open": 166.2,
-        "previousClose": 166.22,
+        "latestPrice": 171.08999633789062,
+        "open": 172.04,
+        "previousClose": 171.65,
         "symbol": "gld",
-        "week52High": 183.21,
+        "week52High": 178.85,
         "week52Low": 157.13,
-        "ytdChange": "-6.11%"
+        "ytdChange": "-1.52%"
     },
     {
-        "latestPrice": 468.2799987792969,
-        "open": 464.41,
-        "previousClose": 458.79,
+        "latestPrice": 437.9800109863281,
+        "open": 445.56,
+        "previousClose": 446.75,
         "symbol": "spy",
-        "week52High": 473.54,
-        "week52Low": 362.03,
-        "ytdChange": "26.67%"
+        "week52High": 479.98,
+        "week52Low": 368.27,
+        "ytdChange": "-1.45%"
     },
     {
-        "latestPrice": 151.0,
-        "open": 151.72,
-        "previousClose": 152.23,
+        "latestPrice": 143.6300048828125,
+        "open": 143.4,
+        "previousClose": 141.94,
         "symbol": "tlt",
-        "week52High": 159.39,
+        "week52High": 155.12,
         "week52Low": 133.19,
-        "ytdChange": "-7.28%"
+        "ytdChange": "-3.29%"
     },
     {
-        "latestPrice": 167.44000244140625,
-        "open": 161.77,
-        "previousClose": 153.59,
+        "latestPrice": 56.66999816894531,
+        "open": 60.62,
+        "previousClose": 61.88,
         "symbol": "tqqq",
-        "week52High": 183.36,
-        "week52Low": 75.03,
-        "ytdChange": "87.46%"
+        "week52High": 91.68,
+        "week52Low": 37.51,
+        "ytdChange": "-13.18%"
     },
     {
-        "latestPrice": 145.58999633789062,
-        "open": 142.23,
-        "previousClose": 137.1,
+        "latestPrice": 59.470001220703125,
+        "open": 62.68,
+        "previousClose": 63.19,
         "symbol": "upro",
-        "week52High": 151.69,
-        "week52Low": 69.76,
-        "ytdChange": "91.74%"
+        "week52High": 78.71,
+        "week52Low": 36.4,
+        "ytdChange": "-5.57%"
     },
     {
-        "latestPrice": 29.90999984741211,
-        "open": 30.36,
-        "previousClose": 30.66,
+        "latestPrice": 25.59000015258789,
+        "open": 25.42,
+        "previousClose": 24.67,
         "symbol": "tmf",
-        "week52High": 36.19,
+        "week52High": 32.86,
         "week52Low": 20.91,
-        "ytdChange": "-21.77%"
+        "ytdChange": "-12.11%"
     }
 ]
