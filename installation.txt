@@ -7,3 +7,6 @@ docker build -t invincible-fastapi .
 docker tag invincible-fastapi terrysclaw/invincible-fastapi
 
 docker push terrysclaw/invincible-fastapi
+
+
+docker build -t invincible-fastapi .;docker tag invincible-fastapi terrysclaw/invincible-fastapi;docker push terrysclaw/invincible-fastapi
