@@ -1,3 +1,5 @@
+import numpy as np
+
 import requests
 import json 
 from datetime import datetime
@@ -114,7 +116,7 @@ def get_yahoo_quotes():
                     "latestPrice": quote_table.get('Quote Price'),
                     "week52Low": float(quote_table.get('52 Week Range').split(" - ")[0]),
                     "week52High": float(quote_table.get('52 Week Range').split(" - ")[1]),
-                    "ytdChange": quote_table.get('YTD Daily Total Return'),
+                    "ytdChange": quote_table.get('YTD Daily Total Return') if not quote_table.get('YTD Daily Total Return') else 0
                 }
             )
 

@@ -25,13 +25,20 @@ def calculate_etfs():
     symbols = ['spy', 'upro', 'qqq', 'qld', 'tqqq', 'tlt', 'tmf', 'gld']
 
     for symbol in symbols:
-        if datetime.now(timezone.utc).astimezone().tzinfo.utcoffset(None)==timedelta(seconds=28800):
-            df = yfin.download(symbol, start='2005-01-01', end=datetime.today())
-            df_weekly = yfin.download(symbol, start='2005-01-01', end=datetime.today(), interval="1wk")
-        else:
-            df = yfin.download(symbol, start='2004-12-31', end=datetime.today())
-            df_weekly = yfin.download(symbol, start='2004-12-31', end=datetime.today(), interval="1wk")
+        # if datetime.now(timezone.utc).astimezone().tzinfo.utcoffset(None)==timedelta(seconds=28800):
+        #     df = yfin.download(symbol, start='2005-01-01', end=datetime.today())
+        #     df_weekly = yfin.download(symbol, start='2005-01-01', end=datetime.today(), interval="1wk")
+        # else:
+        #     df = yfin.download(symbol, start='2004-12-31', end=datetime.today())
+        #     df_weekly = yfin.download(symbol, start='2004-12-31', end=datetime.today(), interval="1wk")
         
+        if datetime.now(timezone.utc).astimezone().tzinfo.utcoffset(None)==timedelta(seconds=28800):
+            df = yfin.download(symbol, start='2013-01-01', end='2022-02-01')
+            df_weekly = yfin.download(symbol, start='2013-01-01', end='2022-02-01', interval="1wk")
+        else:
+            df = yfin.download(symbol, start='2012-12-31', end='2022-01-31')
+            df_weekly = yfin.download(symbol, start='2012-12-31', end='2022-01-31', interval="1wk")
+
         df.dropna(axis = 0, how ='any').to_csv('static/etfs/' + symbol + '_daily.csv')
         df_weekly.dropna(axis = 0, how ='any').to_csv('static/etfs/' + symbol + '_weekly.csv')
 

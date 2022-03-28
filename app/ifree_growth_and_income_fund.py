@@ -63,9 +63,9 @@ def calculate_ifree_growth_and_income_fund():
     
 def calculate_ifree_da():
     if datetime.now(timezone.utc).astimezone().tzinfo.utcoffset(None)==timedelta(seconds=28800):
-        prices = ffn.get('TQQQ, TMF, GLD, QLD', start='2011-01-01', end=datetime.today())
+        prices = ffn.get('TQQQ, TMF, GLD, QLD', start='2012-01-01', end='2022-02-01')
     else:
-        prices = ffn.get('TQQQ, TMF, GLD, QLD', start='2010-12-31', end=datetime.today())
+        prices = ffn.get('TQQQ, TMF, GLD, QLD', start='2011-12-31', end='2022-01-31')
     
 
     prices = prices.reset_index()
@@ -112,6 +112,9 @@ def calculate_ifree_da():
     ### Plot for Fact Sheet
     prices.set_index("Date", inplace = True)
     perf = prices.loc[:, symbols].calc_stats()
+    perf.stats.to_csv('static/iFREE_Adventurer_Strategy_stats.csv')
+    perf['qld'].return_table.to_csv('static/qld_monthly_returns.csv')
+    perf['portfolio'].return_table.to_csv('static/iFREE_Adventurer_Strategy_monthly_returns.csv')
     # perf = prices['portfolio'].calc_stats()
 
     fig = plt.figure(constrained_layout=True, figsize=(10, 5))
