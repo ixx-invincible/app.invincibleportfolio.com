@@ -63,19 +63,20 @@ def calculate_ifree_growth_and_income_fund():
     
 def calculate_ifree_da():
     if datetime.now(timezone.utc).astimezone().tzinfo.utcoffset(None)==timedelta(seconds=28800):
-        prices = ffn.get('TQQQ, TMF, GLD, QLD', start='2012-01-01', end='2022-02-01')
+        prices = ffn.get('TQQQ, UPRO, TMF, GLD, QLD', start='2012-01-01', end='2022-02-01')
     else:
-        prices = ffn.get('TQQQ, TMF, GLD, QLD', start='2011-12-31', end='2022-01-31')
+        prices = ffn.get('TQQQ, UPRO, TMF, GLD, QLD', start='2011-12-31', end='2022-01-31')
     
 
     prices = prices.reset_index()
     prices['portfolio'] = 100
     prices['tqqq_rb'] = 0
+    prices['upro_rb'] = 0
     prices['tmf_rb'] = 0
     prices['gld_rb'] = 0
     prices['portfolio_rb'] = 100
 
-    symbols = ['tqqq', 'tmf', 'gld', 'qld']
+    symbols = ['tqqq', 'upro', 'tmf', 'gld', 'qld']
 
     for i in prices.index:
         if i == 0:
@@ -86,9 +87,10 @@ def calculate_ifree_da():
             
         else:
             prices.loc[i, 'portfolio'] = prices['portfolio_rb'][i-1] * (
-                    (prices['tqqq'][i] / prices['tqqq_rb'][i-1]) * 0.5 +
-                    (prices['tmf'][i] / prices['tmf_rb'][i-1]) * 0.4 +
-                    (prices['gld'][i] / prices['gld_rb'][i-1]) * 0.1
+                    (prices['tqqq'][i] / prices['tqqq_rb'][i-1]) * 0.225 +
+                    (prices['upro'][i] / prices['upro_rb'][i-1]) * 0.225 +
+                    (prices['tmf'][i] / prices['tmf_rb'][i-1]) * 0.3 +
+                    (prices['gld'][i] / prices['gld_rb'][i-1]) * 0.25
                 )
             
             # Quarter-end rebalancing
@@ -106,7 +108,7 @@ def calculate_ifree_da():
     
     symbols.append('portfolio')
 
-    prices.to_csv('static/tqqq_tmf_gld_qld.csv')
+    prices.to_csv('static/tqqq_urpo_tmf_gld_qld.csv')
 
     
     ### Plot for Fact Sheet

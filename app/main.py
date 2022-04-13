@@ -1,6 +1,6 @@
 import asyncio
 
-from fastapi import FastAPI
+from fastapi import FastAPI, BackgroundTasks
 from fastapi.staticfiles import StaticFiles
 from typing import List
 from pydantic import AnyHttpUrl
@@ -11,6 +11,7 @@ from app.cron_job import BackgroundRunner
 from app.quote import get_iex_quotes, get_yahoo_quotes, get_live_quote
 from app.portfolio import calculate_invincible_portfolio, calculate_invincible_portfolio2
 from app.etfs import calculate_etfs
+from app.smart_marksix import send_marksix
 
 
 
@@ -90,3 +91,11 @@ def calculate2():
 def calculate_etf():
     calculate_etfs()
     return {"message": "done"}
+
+
+@app.get("/send-smart-marksix/{email}")
+async def send_smart_marksix(email: str, background_tasks: BackgroundTasks):
+    
+    send_marksix(email, background_tasks)
+    
+    return {"message": "Notification sent in the background"}

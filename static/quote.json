@@ -1,56 +1,56 @@
 [
     {
-        "latestPrice": 182.3800048828125,
-        "open": 181.81,
-        "previousClose": 183.13,
+        "latestPrice": 183.77000427246094,
+        "open": 184.04,
+        "previousClose": 182.37,
         "symbol": "gld",
         "week52High": 193.3,
-        "week52Low": 157.55,
+        "week52Low": 160.68,
         "ytdChange": 0
     },
     {
-        "latestPrice": 452.69000244140625,
-        "open": 451.16,
-        "previousClose": 450.49,
+        "latestPrice": 438.2900085449219,
+        "open": 443.08,
+        "previousClose": 439.92,
         "symbol": "spy",
         "week52High": 479.98,
-        "week52Low": 392.81,
+        "week52Low": 404.0,
         "ytdChange": 0
     },
     {
-        "latestPrice": 128.66000366210938,
-        "open": 129.5,
-        "previousClose": 130.47,
+        "latestPrice": 122.97000122070312,
+        "open": 124.05,
+        "previousClose": 123.14,
         "symbol": "tlt",
         "week52High": 155.12,
-        "week52Low": 127.65,
+        "week52Low": 122.56,
         "ytdChange": 0
     },
     {
-        "latestPrice": 56.93000030517578,
-        "open": 57.04,
-        "previousClose": 57.02,
+        "latestPrice": 47.540000915527344,
+        "open": 50.16,
+        "previousClose": 48.16,
         "symbol": "tqqq",
         "week52High": 91.68,
         "week52Low": 39.56,
         "ytdChange": 0
     },
     {
-        "latestPrice": 64.12999725341797,
-        "open": 63.52,
-        "previousClose": 63.18,
+        "latestPrice": 57.95000076293945,
+        "open": 60.35,
+        "previousClose": 58.63,
         "symbol": "upro",
         "week52High": 78.71,
-        "week52Low": 43.97,
+        "week52Low": 47.74,
         "ytdChange": 0
     },
     {
-        "latestPrice": 18.079999923706055,
-        "open": 18.43,
-        "previousClose": 18.81,
+        "latestPrice": 15.739999771118164,
+        "open": 16.2,
+        "previousClose": 15.84,
         "symbol": "tmf",
         "week52High": 32.44,
-        "week52Low": 17.61,
+        "week52Low": 15.59,
         "ytdChange": 0
     }
 ]
