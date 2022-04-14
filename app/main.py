@@ -1,3 +1,5 @@
+import random
+
 import asyncio
 
 from fastapi import FastAPI, BackgroundTasks
@@ -93,9 +95,49 @@ def calculate_etf():
     return {"message": "done"}
 
 
-@app.get("/send-smart-marksix/{email}")
-async def send_smart_marksix(email: str, background_tasks: BackgroundTasks):
+# @app.get("/send-smart-marksix/{email}")
+# async def send_smart_marksix(email: str, background_tasks: BackgroundTasks):
     
-    send_marksix(email, background_tasks)
+#     send_marksix(email, background_tasks)
     
-    return {"message": "Notification sent in the background"}
+#     return {"message": "Notification sent in the background"}
+
+    
+
+@app.get("/smart-marksix")
+async def get_smart_marksix():
+    random_list = random.sample(range(13, 50), 37)
+
+    random_pos = random.sample(range(0, 36), 5)
+
+    for i in random_pos:
+        random_list.append(random_list[i])
+
+    tickets = []
+
+    for i in range(7):
+        tickets.append(random_list[i*6:(i+1)*6])
+    
+    return tickets
+
+
+@app.get("/smart-marksix/{banker}")
+async def get_smart_marksix(banker: int):
+    random_list = random.sample(range(13, 50), 37)
+
+    random_list.remove(banker)
+
+    random_pos = random.sample(range(0, 36), 5)
+
+    for i in random_pos:
+        random_list.append(random_list[i])
+
+    tickets = []
+
+    for i in range(8):
+        ticket = random_list[i*5:(i+1)*5]
+        ticket.insert(0, banker)
+
+        tickets.append(ticket)
+    
+    return tickets

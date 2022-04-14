@@ -54,3 +54,24 @@ def send_marksix(email, background_tasks):
     fm = FastMail(fastmail_conf)
 
     background_tasks.add_task(fm.send_message, message)
+
+
+def get_marksix():
+    random_list = random.sample(range(13, 50), 37)
+
+    random_pos = random.sample(range(0, 36), 5)
+
+    for i in random_pos:
+        random_list.append(random_list[i])
+
+    tickets = []
+
+    for i in range(7):
+        tickets.append(random_list[i*6:(i+1)*6])
+        
+    print(tickets)
+
+    # tickets.append(random_list[0:6] for i in range(7))
+
+
+get_marksix()
