@@ -141,3 +141,25 @@ async def get_smart_marksix(banker: int):
         tickets.append(ticket)
     
     return tickets
+
+
+@app.get("/smart-marksix/red")
+async def get_smart_marksix_red():
+    random_list = random.sample([1,2,7,8,12,13,18,19,23,24,29,30,34,35,40,45,46], 17)
+
+
+    tickets = []
+
+    for i in range(7):
+        random_pos = random.sample(range(0, 17), 6)
+        
+        tickets.append([
+            random_list[random_pos[0]],
+            random_list[random_pos[1]],
+            random_list[random_pos[2]],
+            random_list[random_pos[3]],
+            random_list[random_pos[4]],
+            random_list[random_pos[5]]
+        ])
+    
+    return tickets
