@@ -22,18 +22,9 @@ runner = BackgroundRunner()
 
 
 BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = [
-        "http://localhost",
         "http://localhost:4200",
-        "http://localhost:4201",
-        "http://localhost:4202",
-        "http://geb.ixx.cc",
-        "https://geb.ixx.cc",
-        "http://etc.ixx.cc",
-        "https://etc.ixx.cc",
         "http://etf.ixx.cc",
         "https://etf.ixx.cc",
-        "http://invincibleportfolio.com",
-        "https://invincibleportfolio.com",
         "http://www.invincibleportfolio.com",
         "https://www.invincibleportfolio.com",
     ]
