@@ -22,7 +22,7 @@ def calculate_etfs():
 
     # prices.to_csv('static/etfs/etfs_latest.csv')
 
-    symbols = ['spy', 'tlt', 'gld', 'xle', 'vnq', 'dbc']
+    symbols = ['spy', 'tlt', 'gld']
     # symbols = ['spy', 'upro', 'qqq', 'qld', 'tqqq', 'tlt', 'tmf', 'gld']
 
     for symbol in symbols:
