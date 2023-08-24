@@ -10,6 +10,9 @@ import matplotlib.ticker as mtick
 import matplotlib.gridspec as gridspec
 import seaborn as sns
 
+import yfinance as yfin
+yfin.pdr_override()
+
 # from mplfinance import candlestick_ohlc
 # import mplfinance as mpf
 from mplfinance.original_flavor import candlestick_ohlc
@@ -30,11 +33,12 @@ spy = ['SPY', 'AAPL', 'MSFT', 'AMZN', 'FB', 'GOOGL', 'GOOG', 'JNJ', 'BRK-B', 'V'
        'ABT', 'XOM', 'CRM', 'ABBV', 'TMO', 'CVX', 'MCD', 'AMGN', 'COST', 'ACN', 
        'NEE', 'BMY', 'MDT', 'LLY', 'DHR', 'LIN', 'AVGO', 'PM', 'QCOM', 'NKE']
 
-hs50 = ['2800.HK', '0700.HK', '1299.HK', '0005.HK', '0939.HK', '3690.HK', '0388.HK', '2318.HK', '9988.HK', '1810.HK', '1398.HK',
-'0941.HK', '2269.HK', '3988.HK', '0669.HK', '0883.HK', '0001.HK', '0027.HK', '0002.HK', '0823.HK', '0175.HK',
-'0016.HK', '2382.HK', '2313.HK', '2020.HK', '0003.HK', '2628.HK', '1109.HK', '1113.HK', '2319.HK', '0011.HK',
-'0386.HK', '1928.HK', '1177.HK', '2388.HK', '1997.HK', '0688.HK', '2007.HK', '1093.HK', '0066.HK', '0006.HK',
-'0017.HK', '0857.HK', '0288.HK', '0012.HK', '0267.HK', '1876.HK', '0101.HK', '1044.HK', '3328.HK', '1038.HK']
+hs50 = ['2800.HK', '0700.HK', '9988.HK', '0941.HK', '0005.HK', '0939.HK', '3690.HK', '1299.HK', '0883.HK', '9999.HK', 
+        '9618.HK', '9888.HK', '0388.HK', '2318.HK', '1810.HK', '1398.HK', '0016.HK', '2020.HK', '1211.HK', '1876.HK', 
+        '2388.HK', '1109.HK', '0027.HK', '0267.HK', '3988.HK', '9633.HK', '1928.HK', '0066.HK', '9961.HK', '2269.HK', 
+        '0011.HK', '0762.HK', '0688.HK', '0001.HK', '0291.HK', '1113.HK', '0002.HK', '0669.HK', '0981.HK', '3968.HK', 
+        '6618.HK', '1929.HK', '6862.HK', '0857.HK', '2313.HK', '0003.HK', '0386.HK', '0012.HK', '0960.HK', '1997.HK', 
+        '0992.HK', '2331.HK', '2319.HK', '0826.HK', '1038.HK', '0175.HK', '2688.HK', '2628.HK', '0006.HK', '0316.HK']
 
 
 
@@ -50,15 +54,19 @@ us_equities = ['SPY', 'QQQ', 'MTUM']
 
 indexes = [qqq, spy, hs50, metal, pp, us_equities]
 #
-indexes = [hs50]
+indexes = [qqq]
 
 
 for tickers in indexes:
+    
     m = pd.DataFrame()
     
     for ticker in tickers:
+        print(ticker)
+
         try:
-            df = pdr.get_data_yahoo(ticker, start="2010-01-01", interval='w')
+            # df = pdr.get_data_yahoo(ticker, start="2010-01-01", interval='w')
+            df = yfin.download(ticker, start='2010-01-01', interval='1wk')
             
             df.rename(columns={'Adj Close': ticker}, inplace=True)
             
@@ -78,6 +86,8 @@ for tickers in indexes:
             df['momentum'] = (df['z-score_3m']+df['z-score_12m'])/2
             
             df.to_excel('out/' + ticker +  '.xlsx', sheet_name=ticker)
+
+            print('out/' + ticker +  '.xlsx')
             
             
             fig = plt.figure(constrained_layout=True, figsize=(20, 10))
@@ -119,7 +129,7 @@ for tickers in indexes:
             if df['momentum'].iloc[-1] > m[tickers[0]].iloc[-1]:
                 print(ticker)
         except:
-            pass
+            raise
 
             
             
