@@ -21,13 +21,13 @@ from mplfinance.original_flavor import candlestick_ohlc
 faang = ['QQQ', 'AAPL', 'AMZN', 'MSFT', 'FB', 'GOOGL', 'GOOG']
 
 #https://www.zacks.com/funds/etf/QQQ/holding
-qqq = ['QQQ', 'AAPL', 'AMZN', 'MSFT', 'FB', 'GOOGL', 'GOOG', 'TSLA', 'NVDA', 'ADBE', 'NFLX', 
+qqq = ['QQQ', 'AAPL', 'AMZN', 'MSFT', 'META', 'GOOGL', 'GOOG', 'TSLA', 'NVDA', 'ADBE', 'NFLX', 
        'PYPL', 'INTC', 'CMCSA', 'PEP', 'CSCO', 'COST', 'AMGN', 'TMUS', 'AVGO', 'TXN', 
        'QCOM', 'CHTR', 'AMD', 'SBUX', 'INTU','MDLZ', 'GILD', 'ISRG', 'BKNG', 'JD', 
-       'VRTX', 'FISV', 'ATVI', 'REGN', 'MELI', 'ADP', 'AMAT', 'CSX', 'ADSK', 'ILMN', 
+       'VRTX', 'ATVI', 'REGN', 'MELI', 'ADP', 'AMAT', 'CSX', 'ADSK', 'ILMN', 
        'LRCX', 'MU', 'ZM', 'LULU', 'BIIB', 'ADI', 'MNST', 'KHC', 'EA', 'EBAY']
 #https://www.zacks.com/funds/etf/SPY/holding
-spy = ['SPY', 'AAPL', 'MSFT', 'AMZN', 'FB', 'GOOGL', 'GOOG', 'JNJ', 'BRK-B', 'V', 'PG', 
+spy = ['SPY', 'AAPL', 'MSFT', 'AMZN', 'META', 'GOOGL', 'GOOG', 'JNJ', 'BRK-B', 'V', 'PG', 
        'JPM', 'UNH', 'HD', 'MA', 'NVDA', 'VZ', 'PYPL', 'PFE', 'NFLX', 'ADBE', 
        'T', 'DIS', 'INTC', 'MRK', 'CMCSA', 'CSCO', 'BAC', 'PEP', 'KO', 'WMT', 
        'ABT', 'XOM', 'CRM', 'ABBV', 'TMO', 'CVX', 'MCD', 'AMGN', 'COST', 'ACN', 
