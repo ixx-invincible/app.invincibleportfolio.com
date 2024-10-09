@@ -22,9 +22,13 @@ def calculate_etfs():
 
     # prices.to_csv('static/etfs/etfs_latest.csv')
 
-    # symbols = ['spy', 'tlt', 'gld']
+    symbols = ['spy', 'qqq', 'tlt', 'gld', '^VIX']
     # symbols = ['spy', 'upro', 'qqq', 'qld', 'tqqq', 'tlt', 'tmf', 'gld', '^HSI']
-    symbols = ['^HSI']
+    # symbols = ['^HSI']
+    # symbols = ['spy']
+    # symbols = ['2800.HK', '0388.HK', '0700.HK']
+
+
 
     for symbol in symbols:
         if datetime.now(timezone.utc).astimezone().tzinfo.utcoffset(None)==timedelta(seconds=28800):
