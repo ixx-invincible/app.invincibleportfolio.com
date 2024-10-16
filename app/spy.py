@@ -17,8 +17,11 @@ yfin.pdr_override()
 def spy_analysis():
     start='2004-12-31'
 
-    etf = 'QQQ'
-    vix = 'VXN'
+    etf = 'SPY'
+    vix = 'VIX'
+
+    # etf = 'QQQ'
+    # vix = 'VXN'
     
     if datetime.now(timezone.utc).astimezone().tzinfo.utcoffset(None)==timedelta(seconds=28800):
         start='2005-01-01'
