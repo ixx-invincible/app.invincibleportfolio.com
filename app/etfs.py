@@ -22,21 +22,24 @@ def calculate_etfs():
 
     # prices.to_csv('static/etfs/etfs_latest.csv')
 
-    symbols = ['spy', 'qqq', 'tlt', 'gld', '^VIX']
+    # symbols = ['spy', 'qqq', 'tlt', 'gld', '^VIX']
     # symbols = ['spy', 'upro', 'qqq', 'qld', 'tqqq', 'tlt', 'tmf', 'gld', '^HSI']
     # symbols = ['^HSI']
     # symbols = ['spy']
     # symbols = ['2800.HK', '0388.HK', '0700.HK']
+    symbols = ['^GSPC']
 
 
 
     for symbol in symbols:
         if datetime.now(timezone.utc).astimezone().tzinfo.utcoffset(None)==timedelta(seconds=28800):
-            df = yfin.download(symbol, start='2005-01-01', end=datetime.today())
-            df_weekly = yfin.download(symbol, start='2005-01-01', end=datetime.today(), interval="1wk")
+            # df = yfin.download(symbol, start='2005-01-01', end=datetime.today())
+            # df_weekly = yfin.download(symbol, start='2005-01-01', end=datetime.today(), interval="1wk")
+            df = yfin.download(symbol, start='2000-01-01', end=datetime.today())
+            df_weekly = yfin.download(symbol, start='2000-01-01', end=datetime.today(), interval="1mo")
         else:
-            df = yfin.download(symbol, start='2004-12-31', end=datetime.today())
-            df_weekly = yfin.download(symbol, start='2004-12-31', end=datetime.today(), interval="1wk")
+            df = yfin.download(symbol, start='1999-12-31', end=datetime.today())
+            df_weekly = yfin.download(symbol, start='1999-12-31', end=datetime.today(), interval="1mo")
         
         # if datetime.now(timezone.utc).astimezone().tzinfo.utcoffset(None)==timedelta(seconds=28800):
         #     df = yfin.download(symbol, start='2013-01-01', end='2023-02-01')
