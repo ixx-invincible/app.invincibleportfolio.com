@@ -16,7 +16,7 @@ class BackgroundRunner:
             if now.minute != self.min:
                 print(now, "checking cron job")
 
-                if now.hour != self.hour and now.hour == 0:
+                if now.hour != self.hour and (now.hour == 0 or now.hour == 30):
                     print(now, "exec calculate_invincible_portfolio() job")
                     calculate_invincible_portfolio()
                     calculate_invincible_portfolio2()

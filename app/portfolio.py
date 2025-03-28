@@ -13,7 +13,7 @@ import matplotlib.dates as mdates
 import matplotlib.ticker as mtick
 import matplotlib.gridspec as gridspec
 import yfinance as yfin
-yfin.pdr_override()
+# yfin.pdr_override()
 
 
 def calculate_invincible_portfolio():

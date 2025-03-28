@@ -27,7 +27,7 @@ def calculate_etfs():
     # symbols = ['^HSI']
     # symbols = ['spy']
     # symbols = ['2800.HK', '0388.HK', '0700.HK']
-    symbols = ['^GSPC']
+    symbols = ['qqq']
 
 
 
