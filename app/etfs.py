@@ -11,7 +11,7 @@ import ffn
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 import yfinance as yfin
-yfin.pdr_override()
+# yfin.pdr_override()
 
 
 def calculate_etfs():
