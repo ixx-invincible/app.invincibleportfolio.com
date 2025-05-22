@@ -27,7 +27,7 @@ def calculate_etfs():
     # symbols = ['^HSI']
     # symbols = ['spy']
     # symbols = ['2800.HK', '0388.HK', '0700.HK']
-    symbols = ['qqq']
+    symbols = ['spy']
 
 
 
@@ -51,7 +51,7 @@ def calculate_etfs():
         df.dropna(axis = 0, how ='any').to_csv('static/etfs/' + symbol + '_daily.csv')
         df_weekly.dropna(axis = 0, how ='any').to_csv('static/etfs/' + symbol + '_weekly.csv')
 
-        perf = df['Adj Close'].calc_stats()
+        perf = df['Close'].calc_stats()
 
         perf.stats.to_csv('static/etfs/' + symbol + '_stats.csv')
         perf.return_table.to_csv('static/etfs/' + symbol + '_monthly_returns.csv')
@@ -61,7 +61,7 @@ def calculate_etfs():
         spec = fig.add_gridspec(ncols=1, nrows=2, height_ratios=[3, 1])
 
         ax1 = fig.add_subplot(spec[0, 0])
-        ax1.plot(df['Adj Close'], label=symbol, linewidth=2)
+        ax1.plot(df['Close'], label=symbol, linewidth=2)
         ax1.legend(loc='upper left')
         ax1.grid(True)
 
@@ -78,7 +78,7 @@ def calculate_etfs():
         spec = fig.add_gridspec(ncols=1, nrows=2, height_ratios=[3, 1])
 
         ax1 = fig.add_subplot(spec[0, 0])
-        ax1.plot(df['Adj Close'].rebase(), label=symbol, linewidth=2)
+        ax1.plot(df['Close'].rebase(), label=symbol, linewidth=2)
         ax1.legend(loc='upper left')
         ax1.grid(True)
 
